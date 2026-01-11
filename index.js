@@ -1,7 +1,14 @@
+// 建立一個HTPP伺服器
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => res.send('機器人運作中！'));
+app.listen(port, () => console.log(`監聽埠號： ${port}`));
+
 // 引用 discord.js 所需的 
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 // 機器人的 token
-const { DiscordBotToken } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 // const client = new Client({intents: [GatewayIntentBits.Guilds]});
@@ -57,31 +64,27 @@ client.on(Events.InteractionCreate, async interaction => {
         }
     }
 });
-// client.on(Events.InteractionCreate, async ( e ) => {
-//     // isChatInputCommand 斜線指令
-//     if(!e.isChatInputCommand()) return;
 
-//     if(e.commandName == 'hello'){
-//         await e.reply('斜線指令');
-//     };
-// })
-
-// client.on(Events.MessageCreate, (message) => {
-//     if(message.content === '!hello'){
-//         message.channel.send('Hello!');
-//     }
-// });
-
-// client.on(Events.MessageDelete, (message) => {
-//     console.log(message);
-//     console.log(`${message.author.username} 更新了 ${message.content}`);
-// })
 
 // ctrl + F12 進入 Events 有甚麼事件 once 是回報一次
 client.once(Events.ClientReady, c => {
     console.log(`Ready ${c.user.tag}`);
 });
 
-
 // token login
-client.login(DiscordBotToken);
+let token;
+require('dotenv').config();
+try {
+    const config = require('./config.json');
+    token = config.DiscordBotToken;
+} catch (error) {
+    // 如果找不到 config.json，就從環境變數讀取 (雲端用)
+    token = process.env.TOKEN;
+}
+
+if (!token) {
+    console.error("錯誤：找不到機器人 Token！");
+    process.exit(1);
+}
+
+client.login(token);

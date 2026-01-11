@@ -1,10 +1,38 @@
 // 新增機器人指令用
+require('dotenv').config(); 
+
+let token;
+let clientId;
+let guildIds = [];
+
+try {
+    const config = require('./config.json');
+    token = config.DiscordBotToken;
+    clientId = config.ApplicationID;
+    
+    if (config.aassdd51263sever) guildIds.push(config.aassdd51263sever);
+    if (config.bosssever) guildIds.push(config.bosssever);
+
+} catch (error) {
+    token = process.env.TOKEN;
+    clientId = process.env.CLIENT_ID;
+    if (process.env.TEST_SERVER_ID) guildIds.push(process.env.TEST_SERVER_ID);
+    if (process.env.BOSS_SERVER_ID) guildIds.push(process.env.BOSS_SERVER_ID);
+}
+
+if (!token) {
+    console.error("找不到機器人 Token");
+    process.exit(1);
+}
+
+if (!clientId) {
+    console.error("找不到 Application ID (Client ID)");
+}
+
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
-const { DiscordBotToken, ApplicationID, aassdd51263sever, bosssever } = require('./config.json');
-const guildIds = [ aassdd51263sever, bosssever ];
+
 const fs = require('node:fs');
 const path = require('node:path');
-console.log(guildIds);
 const commands = [];
 // 取得 commands 資料夾的路徑
 const commandsPath = path.join(__dirname, 'commands');
@@ -21,13 +49,9 @@ for (let i = 0; i < commandFiles.length; i++) {
         console.log(`${filePath} 缺少必要的 "data" 或 "execute" 屬性。`);
     }
 }
-// const commands = [
-//     new SlashCommandBuilder()
-//         .setName('hello')
-//         .setDescription('我是機器人')
-// ].map( command => command.toJSON());
 
-const rest = new REST({version: '10'}).setToken(DiscordBotToken);
+
+const rest = new REST({version: '10'}).setToken(token);
 
 (async () => {
     try {
@@ -35,10 +59,9 @@ const rest = new REST({version: '10'}).setToken(DiscordBotToken);
 
         for (const guildId of guildIds) {
             await rest.put(
-                Routes.applicationGuildCommands(ApplicationID, guildId),
+                Routes.applicationGuildCommands(clientId, guildId),
                 { body: commands },
             );
-            console.log(`成功更新伺服器指令：${guildId}`);
         }
 
         console.log('成功註冊指令！');

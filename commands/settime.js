@@ -4,7 +4,7 @@ module.exports = {
     data: new SlashCommandBuilder()
     // 這兩行是設定指令名稱跟描述
         .setName('settime')
-        .setDescription('自動偵測頻道並標記對應身分組')
+        .setDescription('依照當前頻道去標記身分組並修改時間 機器人每10分鐘只能改2次該頻道 切勿重複修改')
         .addStringOption(option =>
         option.setName('message')
                 .setDescription('要發送的訊息內容')
@@ -15,11 +15,41 @@ module.exports = {
             .setRequired(true)),
     async execute(interaction) {
         const messageText = interaction.options.getString('message');
-        const role = interaction.options.getRole('target_role');
+        const channelName = interaction.channel.name;
+        const channel = interaction.channel;
+        const role = interaction.guild.roles.cache.find(r => channelName.includes(r.name) || r.name.includes(channelName));
+        const baseName = channelName.split('-')[0];
+        const newName = `${baseName}-${messageText}`;
+        if (channel.name === newName) {
+           return await interaction.reply({ content: `${newName}跟頻道一樣不用改`, ephemeral: true });
+        }
+        if (!role) {
+            return await interaction.reply({ content: `找不到與頻道 #${channelName} 的身分組。`, ephemeral: true });
+        }
+        try {
 
-        await interaction.reply({
-            content: `<@&${role.id}> ${messageText} `,
-            allowedMentions: { roles: [role.id] }
-        });
+            await channel.setName(newName);
+
+
+            await interaction.reply({
+                content: `<@&${role.id}> ${messageText}`,
+                allowedMentions: { roles: [role.id] }
+            });
+
+        } catch (error) {
+            console.error(error);
+            
+            if (error.status === 429) {
+                return await interaction.reply({ 
+                    content: 'Discord 規定10分鐘內只能修改2次頻道名稱。請等一下再試。', 
+                    ephemeral: true 
+                });
+            }
+
+            await interaction.reply({ 
+                content: '執行指令時發生錯誤，請檢查機器人是否有「管理頻道」權限。', 
+                ephemeral: true 
+            });
+        }
     },
 };
