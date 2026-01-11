@@ -1,10 +1,10 @@
 # --- 必要的排除項目 ---
-# 存放套件的資料夾，體積巨大且可透過 npm install 重建，不需上傳
+
 node_modules
 
-# 敏感資訊文件，通常用來存放你的 BOT_TOKEN，絕對不能上傳！
+
 .env
-# 如果你習慣把 Token 放在 config.json，也請務必排除
+
 config.json
 
 
