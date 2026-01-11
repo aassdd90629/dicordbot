@@ -20,6 +20,8 @@ module.exports = {
         const role = interaction.guild.roles.cache.find(r => channelName.includes(r.name) || r.name.includes(channelName));
         const baseName = channelName.split('-')[0];
         const newName = `${baseName}-${messageText}`;
+
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbz2q_Ch48Imh9O_2znFsMsh9jGv4IdhmbBjymOzK5p1VlnatFwaOLvlOzbHLm_6nXc1/exec';
         if (channel.name === newName) {
            return await interaction.reply({ content: `${newName}跟頻道一樣不用改`, ephemeral: true });
         }
@@ -35,6 +37,17 @@ module.exports = {
                 content: `<@&${role.id}> ${messageText}`,
                 allowedMentions: { roles: [role.id] }
             });
+
+            fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    user: interaction.user.tag,
+                    oldName: channelName,
+                    newName: newName,
+                    message: messageText,
+                    channelId: channel.id
+                })
+            }).catch(err => console.error('傳送到試算表失敗:', err));
 
         } catch (error) {
             console.error(error);
