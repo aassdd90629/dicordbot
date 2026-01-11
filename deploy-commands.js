@@ -1,9 +1,10 @@
 // 新增機器人指令用
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
-const { DiscordBotToken, ApplicationID, aassdd51263sever } = require('./config.json');
+const { DiscordBotToken, ApplicationID, aassdd51263sever, bosssever } = require('./config.json');
+const guildIds = [ aassdd51263sever, bosssever ];
 const fs = require('node:fs');
 const path = require('node:path');
-
+console.log(guildIds);
 const commands = [];
 // 取得 commands 資料夾的路徑
 const commandsPath = path.join(__dirname, 'commands');
@@ -32,10 +33,13 @@ const rest = new REST({version: '10'}).setToken(DiscordBotToken);
     try {
         console.log(`正在更新 ${commands.length} 個斜線指令...`);
 
-        await rest.put(
-            Routes.applicationGuildCommands( ApplicationID, aassdd51263sever),
-            { body: commands },
-        );
+        for (const guildId of guildIds) {
+            await rest.put(
+                Routes.applicationGuildCommands(ApplicationID, guildId),
+                { body: commands },
+            );
+            console.log(`成功更新伺服器指令：${guildId}`);
+        }
 
         console.log('成功註冊指令！');
     } catch (error) {
