@@ -1,0 +1,33 @@
+# --- 必要的排除項目 ---
+
+node_modules
+
+
+.env
+
+config.json
+
+
+# --- 日誌與暫存檔案 (Logs) ---
+# 程式執行時產生的錯誤紀錄或日誌
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# --- 作業系統與開發工具設定 ---
+# Windows 系統產生的縮圖檔
+Thumbs.db
+# macOS 系統產生的檔案
+.DS_Store
+# 編輯器設定 (如 VS Code 或 WebStorm)
+.vscode/
+.idea/
+
+
+# --- 建置產出 (如果你未來改用 TypeScript) ---
+# 編譯後的 JavaScript 檔案
+dist/
+out/
