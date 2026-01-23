@@ -42,10 +42,10 @@ module.exports = {
                 method: 'POST',
                 body: JSON.stringify({
                     user: interaction.user.tag,
-                    oldName: channelName,
-                    newName: newName,
-                    message: messageText,
-                    channelId: channel.id
+                    // oldName: channelName,
+                    newName: baseName,
+                    message: messageText
+                    // channelId: channel.id
                 })
             }).catch(err => console.error('傳送到試算表失敗:', err));
 
