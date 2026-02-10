@@ -82,6 +82,7 @@ try {
     token = process.env.TOKEN;
 }
 
+
 if (!token) {
     console.error("錯誤：找不到機器人 Token！");
     process.exit(1);
