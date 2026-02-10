@@ -74,10 +74,11 @@ client.once(Events.ClientReady, c => {
 // token login
 let token;
 require('dotenv').config();
-
 try {
-    token = process.env.TOKEN || require('./config.json').DiscordBotToken;
+    const config = require('./config.json');
+    token = config.DiscordBotToken;
 } catch (error) {
+    // 如果找不到 config.json，就從環境變數讀取 (雲端用)
     token = process.env.TOKEN;
 }
 
