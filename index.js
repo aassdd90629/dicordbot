@@ -80,6 +80,9 @@ try {
 } catch (error) {
     // 如果找不到 config.json，就從環境變數讀取 (雲端用)
     token = process.env.TOKEN;
+    if(!token){
+        console.log('沒有');
+    }
 }
 
 if (!token) {
