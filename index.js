@@ -1,4 +1,5 @@
 // 建立一個HTPP伺服器
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -73,7 +74,6 @@ client.once(Events.ClientReady, c => {
 
 // token login
 
-require('dotenv').config();
 // 優先順序：環境變數 (Render) > 本地 config.json (測試)
 const token = process.env.TOKEN || (function() {
     try {
