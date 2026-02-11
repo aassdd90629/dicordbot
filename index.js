@@ -87,6 +87,7 @@ if (token == null) {
     console.error("❌ 錯誤：找不到 Token。請檢查 Render 環境變數或 config.json");
     process.exit(1);
 }else{
+    console.log(token.length);
     console.log('有收到');
     client.login(token);
 }
