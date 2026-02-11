@@ -67,7 +67,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 
 // ctrl + F12 進入 Events 有甚麼事件 once 是回報一次
-client.once(Events.ClientReady, c => {
+client.on(Events.ClientReady, c => {
     console.log(`Ready ${c.user.tag}`);
 });
 
@@ -87,7 +87,18 @@ if (token == null) {
     console.error("❌ 錯誤：找不到 Token。請檢查 Render 環境變數或 config.json");
     process.exit(1);
 }else{
-    console.log(token.length);
-    console.log('有收到');
-    client.login(token);
+    console.log('--- 準備登入 Discord ---');
+    client.login(token)
+        .then(() => {
+            console.log('✅ client.login 成功執行');
+        })
+        .catch(err => {
+            console.error('❌ Discord 登入失敗：', err.message);
+            // 這會告訴我們是 Token 錯了，還是網路連不上，或是 Intents 沒開好
+        });
+
+    // 同時檢查是否有連線錯誤事件
+    client.on('error', (error) => {
+        console.error('Discord Client 發生錯誤:', error);
+    });
 }
