@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-
 app.get('/', (req, res) => res.send('機器人運作中！'));
 app.listen(port, () => console.log(`監聽埠號： ${port}`));
 
@@ -83,7 +82,8 @@ const token = process.env.TOKEN || (function() {
     }
 })();
 
-if (!token) {
+if (token == null) {
+    console.log('沒有');
     console.error("❌ 錯誤：找不到 Token。請檢查 Render 環境變數或 config.json");
     process.exit(1);
 }else{
