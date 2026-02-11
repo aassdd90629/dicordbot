@@ -16,12 +16,12 @@ const client = new Client({
     intents:[
         // 權限 設8
         GatewayIntentBits.Guilds,
-        // 伺服器訊息
-        GatewayIntentBits.GuildMessages,
-        // 訊息內容
-        GatewayIntentBits.MessageContent,
-        // 使用者有誰
-        GatewayIntentBits.GuildMembers,
+        // // 伺服器訊息
+        // GatewayIntentBits.GuildMessages,
+        // // 訊息內容
+        // GatewayIntentBits.MessageContent,
+        // // 使用者有誰
+        // GatewayIntentBits.GuildMembers,
     ],
 });
 
